@@ -131,8 +131,6 @@ This site is deployed on **Vercel**.
 
 - 🌐 Portfolio: [portfolio-ruddy-nine-45.vercel.app](https://portfolio-ruddy-nine-45.vercel.app/)
 - 🐙 GitHub: [@monika-singh-baghel](https://github.com/monika-singh-baghel)
-- 💼 LinkedIn: ADD YOUR LINKEDIN URL
-- 📧 Email: ADD YOUR EMAIL
 
 ---
 
