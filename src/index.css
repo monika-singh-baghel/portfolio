@@ -1,0 +1,22 @@
+@tailwind base; @tailwind components; @tailwind utilities;
+:root { color-scheme: dark; --ink:7 7 11; --panel:15 15 23; --line:35 35 58; --violet:139 92 246; --cyan:34 211 238; }
+html.light { color-scheme: light; --ink:246 247 251; --panel:255 255 255; --line:222 227 238; --violet:124 58 237; --cyan:14 116 144; }
+html { scroll-behavior: smooth; scroll-padding-top: 5rem; }
+body { @apply font-sans text-slate-300 antialiased; overflow-x: hidden; transition: background-color .3s; }
+:focus-visible { outline: 2px solid rgb(var(--cyan)); outline-offset: 3px; border-radius: 6px; }
+.grad-text { background: linear-gradient(100deg, rgb(var(--violet)), #6366f1 45%, rgb(var(--cyan))); -webkit-background-clip: text; background-clip: text; color: transparent; }
+/* light-mode text remaps */
+html.light body { color: #334155; }
+html.light .text-white, html.light .hover\:text-white:hover { color: #0f172a; }
+html.light .text-slate-200 { color: #1e293b; } html.light .text-slate-300 { color: #334155; }
+html.light .text-slate-400 { color: #475569; } html.light .text-slate-500, html.light .text-slate-600 { color: #64748b; }
+html.light .text-amber-300 { color: #b45309; } html.light .text-emerald-300, html.light .text-emerald-400 { color: #047857; }
+/* ambient lighting */
+.aurora { position: absolute; border-radius: 9999px; filter: blur(90px); will-change: transform; }
+.a1 { width: 42rem; height: 42rem; left: -12rem; top: -8rem; background: rgb(var(--violet)); opacity: .32; animation: drift 18s ease-in-out infinite alternate; }
+.a2 { width: 36rem; height: 36rem; right: -10rem; top: 18%; background: rgb(var(--cyan)); opacity: .2; animation: drift 22s ease-in-out infinite alternate-reverse; }
+html.light .a1 { opacity: .16; } html.light .a2 { opacity: .12; }
+.grid-bg { position: absolute; inset: 0; background-image: linear-gradient(rgb(var(--line) / .55) 1px, transparent 1px), linear-gradient(90deg, rgb(var(--line) / .55) 1px, transparent 1px); background-size: 56px 56px; -webkit-mask-image: radial-gradient(ellipse at 50% 15%, #000 15%, transparent 72%); mask-image: radial-gradient(ellipse at 50% 15%, #000 15%, transparent 72%); }
+.spot { position: absolute; inset: 0; background: radial-gradient(520px circle at var(--mx, 50%) var(--my, 28%), rgb(var(--violet) / .18), transparent 65%); }
+@keyframes drift { to { transform: translate3d(6rem, 4rem, 0) scale(1.1); } }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .aurora { animation: none; } *, *::before, *::after { transition-duration: .01ms !important; } }
