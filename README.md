@@ -110,8 +110,6 @@ All content lives in `src/data.ts`:
 - `timeline`: education and experience
 - `certs`: certificates
 
-Place new screenshots in the `public/` folder and reference them as `/your-image.jpg`.
-
 ---
 
 ## 🌐 Deployment
@@ -133,5 +131,3 @@ This site is deployed on **Vercel**.
 - 🐙 GitHub: [@monika-singh-baghel](https://github.com/monika-singh-baghel)
 
 ---
-
-⭐ If you like this portfolio, feel free to star the repo!
