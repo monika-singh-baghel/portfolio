@@ -215,9 +215,27 @@ function Contact() {
   const [copied, setCopied] = useState(false)
   const [f, setF] = useState({ name: '', email: '', msg: '' })
   const copy = async () => { try { await navigator.clipboard.writeText(profile.email) } catch { const t = document.createElement('textarea'); t.value = profile.email; document.body.appendChild(t); t.select(); document.execCommand('copy'); t.remove() } setCopied(true); setTimeout(() => setCopied(false), 2000) }
-  const submit = (e: React.FormEvent) => { e.preventDefault()
-    const body = `${f.msg}\n\n${f.name} (${f.email})`
-    window.location.href = `mailto:${profile.email}?subject=${encodeURIComponent('Portfolio enquiry from ' + f.name)}&body=${encodeURIComponent(body)}` }
+  const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle')
+  const submit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const key = 'ee9531b4-4e14-4c6f-9082-4b51af4be865'
+    setStatus('sending')
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          access_key: key,
+          subject: `Portfolio enquiry from ${f.name}`,
+          from_name: 'Portfolio Contact Form',
+          name: f.name, email: f.email, message: f.msg,
+          botcheck: (e.currentTarget.elements.namedItem('botcheck') as HTMLInputElement | null)?.checked ?? false,
+        }),
+      })
+      const json = await res.json()
+      if (json.success) { setStatus('success'); setF({ name: '', email: '', msg: '' }) } else setStatus('error')
+    } catch { setStatus('error') }
+  }
   const field = 'mt-1.5 w-full rounded-xl border border-line bg-ink/60 px-4 py-3 text-sm text-slate-200 placeholder:text-slate-500 focus:border-violet focus:outline-none'
   const card = 'flex items-center gap-4 rounded-2xl border border-line bg-panel p-4 transition hover:border-violet/50'
   const ico = 'grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-violet/15 text-violet'
@@ -243,7 +261,12 @@ function Contact() {
             <label className="block text-sm text-slate-300">Your name<input required value={f.name} onChange={e => setF({ ...f, name: e.target.value })} className={field} placeholder="Jane Doe" autoComplete="name" /></label>
             <label className="mt-4 block text-sm text-slate-300">Your email<input required type="email" value={f.email} onChange={e => setF({ ...f, email: e.target.value })} className={field} placeholder="jane@company.com" autoComplete="email" /></label>
             <label className="mt-4 block text-sm text-slate-300">Message<textarea required rows={5} value={f.msg} onChange={e => setF({ ...f, msg: e.target.value })} className={field} placeholder="Tell me about the opportunity..." /></label>
-            <button type="submit" className={`${primary} mt-5 w-full`}><Send size={16} />Send Message</button>
+            <input type="checkbox" name="botcheck" className="hidden" tabIndex={-1} autoComplete="off" />
+            <button type="submit" disabled={status === 'sending'} className={`${primary} mt-5 w-full disabled:opacity-60`}><Send size={16} />{status === 'sending' ? 'Sending...' : 'Send Message'}</button>
+            <p className="mt-3 min-h-5 text-sm" role="status" aria-live="polite">
+              {status === 'success' && <span className="text-emerald-400">Thanks! Your message was sent. I'll get back to you soon.</span>}
+              {status === 'error' && <span className="text-red-400">Couldn't send your message. Please try again or email me directly.</span>}
+            </p>
           </form>
         </Reveal>
       </div>
